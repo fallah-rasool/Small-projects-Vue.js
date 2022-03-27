@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Webamooz Todo-list  24-2 </title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app" >
+        <div class="header">
+            <h1>تودولیست وب آموز</h1>
+            <input type="text" placeholder="تودو" v-model.trim="input">
+            <button class="addBtn" @click="add">اضافه کردن به لیست</button>
+            <h2>{{input}}</h2>
+            <h2>{{myObject}}</h2>
+        </div>
+        <ul>
+            <todo-item  
+                v-for="(todo , index) in todos" 
+                :key="todo.name"
+                :todo="todo"
+                @checked="todo.state = !todo.state"
+                @todo-delete="deletetodo(index)"
+            ></todo-item>
+        </ul>
+    </div>
+    <!-- end app -->
+    
+    <!-- vue 3 -->
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+        const app = Vue.createApp(
+            {
+                data: () =>({ 
+                    input:'',
+                    todos:[
+                            {name:'ali',state:false},
+                            {name:'rasool',state:false},
+                        ],          
+                }),
+                methods: {
+                    add(){
+                        if(! this.input) return;
+                        this.todos.push({name: this.input,state:false});
+                        this.input = '';
+                    },
+                    deletetodo(index){
+                       this.todos.splice(index,1);
+                   }
+                }
+            });
+            app.component('TodoItem',{
+                template:` <li  
+                                @click="$emit('checked')"   
+                                :class=" {'checked': todo.state }"
+                                >
+                                        {{todo.name}}
+                                        <button class="close"
+                                        @click="$emit('todo-delete')"
+                                        >X</button>
+                            </li>`,
+                            props:['todo'],
+            });
+            app.mount('#app');
+    </script>
+
+</body>
+</html>

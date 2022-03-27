@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Webamooz Todo-list</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app" >
+        <div class="header">
+            <h1>تودولیست وب آموز</h1>
+            <input type="text" placeholder="تودو" v-model.trim="input">
+            <button class="addBtn" @click="add">اضافه کردن به لیست</button>
+            <h2>{{input}}</h2>
+            <h2>{{myObject}}</h2>
+        </div>
+        <ul>
+            <li  
+            v-for="( todo , index) in todos" 
+            :key="todo.name"
+            @click="todo.state = !todo.state"   
+            :class=" {'checked': todo.state }"
+            >
+                    {{todo.name}}
+                    <button class="close"
+                    @click="deletetodo(index)"
+                    >X</button>
+            </li>
+        </ul>
+    </div>
+    <!-- end app -->
+    
+    <!-- vue 3 -->
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+        const app = Vue.createApp(
+            {
+                data: () =>({ 
+                    input:'',
+                    todos:[
+                            {name:'ali',state:false},
+                            {name:'rasool',state:false},
+                        ],          
+                }),
+                methods: {
+                    add(){
+                        if(! this.input) return;
+                        this.todos.push({name: this.input,state:false});
+                        this.input = '';
+                    },
+                    deletetodo(index){
+                       this.todos.splice(index,1);
+                   }
+                }
+            });
+            app.mount('#app');
+    </script>
+
+</body>
+</html>
